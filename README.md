@@ -5,6 +5,7 @@ A bodyweight tracking app, built in Flutter for IOS & Android
 ## Features
 
 1. New body weight entry
+
 ... Add Entry
 ... Edit Entry
 ... Swipe to delete entry
