@@ -1,16 +1,19 @@
-# body_composition
+# Happiest Scale
 
-A new Flutter project.
+A bodyweight tracking app, built in Flutter for IOS & Android
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+1. New body weight entry
+... Add Entry
+... Edit Entry
+... Swipe to delete entry
 
-A few resources to get you started if this is your first Flutter project:
+## Upcomming Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+1. Cloud based storage (Firebase or Appwrite)
+2. User Account
+3. Moving bodyweight average
+4. Charting
+5. Apple health Integration (Automated imports from Apple Health - Useful for Smart scales that connect to your device to log entries.)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
