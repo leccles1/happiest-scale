@@ -5,31 +5,53 @@ import 'package:path/path.dart';
 class DatabaseService {
   Database _database;
 
-  Database get database => _database;
-
+  DatabaseService._privateConstructor();
   DatabaseService();
+
+  static final DatabaseService instance = DatabaseService._privateConstructor();
 
   Future<DatabaseService> initialiseDatabase() async {
     var databasePath = await getDatabasesPath();
     String path = join(databasePath, 'measurements.db');
 
-    this._database = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) {
+    _database = await openDatabase(
+      path, version: 1,
+      onCreate: (Database db, int version) {
       return db.execute(
           'CREATE TABLE measurement (id INTEGER PRIMARY KEY AUTOINCREMENT, weight INTEGER, notes STRING, unit_of_measurement STRING, date STRING)');
-    });
+      });
 
     return this;
   }
+  
+  Future<Database> get database async {
+    if(_database != null) return _database;
 
-  Future<void> insertMeasurement(Measurement measurement) async {
-    final db = this.database;
+    _database = await _initDatabase();
 
-    await db.insert('measurement', measurement.toMap());
+    return _database;
+  }
+  _initDatabase() async {
+    var databasePath = await getDatabasesPath();
+    String path = join(databasePath, 'measurements.db');
+
+    return await openDatabase(
+      path, version: 1,
+      onCreate: (Database db, int version) {
+      return db.execute(
+          'CREATE TABLE measurement (id INTEGER PRIMARY KEY AUTOINCREMENT, weight INTEGER, notes STRING, unit_of_measurement STRING, date STRING)');
+      });
+  }
+
+  Future<int> insertMeasurement(Measurement measurement) async {
+    final db = await database;
+
+    int rowId = await db.insert('measurement', measurement.toMap());
+    return rowId;
   }
 
   Future<List<Measurement>> fetchMeasurements() async {
-    final db = this.database;
+    final db = await database;
 
     final List<Map<String, dynamic>> maps =
         await db.query('measurement', orderBy: 'id DESC');
@@ -45,7 +67,7 @@ class DatabaseService {
   }
 
   Future<Measurement> fetchMeasurement(int id) async {
-    final db = this.database;
+    final db = await database;
 
     final List<Map<String, dynamic>> foundRow =
         await db.query('measurement', where: 'id = ? ', whereArgs: [id]);
@@ -62,21 +84,21 @@ class DatabaseService {
   }
 
   Future<DatabaseService> resetDatabaseValues() async {
-    final db = database;
+    final db = await database;
 
     await db.delete('measurement');
     return this;
   }
 
   Future<void> deleteMeasurement(int id) async {
-    final db = database;
+    final db = await database;
 
     await db.delete('measurement', where: 'id = ?', whereArgs: [id]);
     return this;
   }
 
   Future<void> updateMeasurement(Measurement measurement) async {
-    final db = this.database;
+    final db = await database;
     print('Updating ${measurement.id}');
     await db.update(
       'measurement',
