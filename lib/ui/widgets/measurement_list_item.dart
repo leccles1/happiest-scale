@@ -1,13 +1,15 @@
 import 'package:body_composition/core/models/measurement_model.dart';
 import 'package:flutter/material.dart';
 
-class MeasurementEntry extends StatelessWidget {
+class MeasurementLisItem extends StatelessWidget {
   final Measurement measurementEntry;
   final Function tapCallback;
-  const MeasurementEntry({Key key, this.measurementEntry, this.tapCallback})
+  final int modelIndex;
+
+  const MeasurementLisItem({Key key, this.measurementEntry, this.tapCallback, this.modelIndex})
       : super(key: key);
 
-  static Map monthMap = {
+  static final Map monthMap = {
     '1': 'Jan',
     '2': 'Feb',
     '3': 'Mar',
@@ -22,7 +24,7 @@ class MeasurementEntry extends StatelessWidget {
     '12': 'Dec'
   };
   void _weightEntryTap() {
-    tapCallback(measurementEntry.id);
+    tapCallback(measurementEntry.id, modelIndex);
   }
 
   @override

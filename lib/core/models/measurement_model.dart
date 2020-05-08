@@ -1,5 +1,5 @@
 class Measurement {
-  final int id;
+  int id;
   final int weight;
   final String notes;
   final String unitOfMeasurement;
