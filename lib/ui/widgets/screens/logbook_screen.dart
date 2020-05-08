@@ -1,8 +1,9 @@
+import 'package:body_composition/ui/widgets/measurement_list_item.dart';
+import 'package:body_composition/ui/widgets/overview_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:body_composition/core/models/measurement_model.dart';
 import 'package:body_composition/ui/viewmodels/measurement_viewmodel.dart';
-import 'package:body_composition/ui/widgets/measurement_list_item.dart';
 
 class LogbookScreen extends StatelessWidget {
     final String title;
@@ -26,46 +27,53 @@ class LogbookScreen extends StatelessWidget {
         leading: Container(),
         title: Text(title),
       ),
-      body: Container(
-        child: Consumer<MeasurementViewModel>(
-          builder: (context, model, _) => Center(
-            child: model.entries.length > 0
-                ? ListView.builder(
-                    itemCount: model.entries.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Dismissible(
-                        confirmDismiss: (direction) async {
-                          if (direction == DismissDirection.endToStart) {
-                            await model.deleteEntry(
-                                model.entries[index].id, index);
-                            return true;
-                          } else {
-                            print('un-recognised swipe');
-                            return false;
-                          }
-                        },
-                        key: UniqueKey(),
-                        background: Container(
-                          alignment: Alignment(0.9, 0.0),
-                          child: Text(
-                            'Delete',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          color: Colors.red,
-                        ),
-                        child: MeasurementLisItem(
-                          measurementEntry: model.entries[index],
-                          modelIndex: index,
-                          tapCallback: measurementEntryTap,
-                        ),
-                      );
-                    })
-                : Center(
-                    child: Text("No entries to show"),
-                  ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          OverviewCard(),
+          Expanded(
+            flex: 85,
+            child: Consumer<MeasurementViewModel>(
+              builder: (context, model, _) => Center(
+                child: model.entries.length > 0
+                    ? ListView.builder(
+                        itemCount: model.entries.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Dismissible(
+                            confirmDismiss: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                await model.deleteEntry(
+                                    model.entries[index].id, index);
+                                return true;
+                              } else {
+                                print('un-recognised swipe');
+                                return false;
+                              }
+                            },
+                            key: UniqueKey(),
+                            background: Container(
+                              alignment: Alignment(0.9, 0.0),
+                              child: Text(
+                                'Delete',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(color: Colors.white, fontSize: 16),
+                              ),
+                              color: Colors.red,
+                            ),
+                            child: MeasurementLisItem(
+                              measurementEntry: model.entries[index],
+                              modelIndex: index,
+                              tapCallback: measurementEntryTap,
+                            ),
+                          );
+                        })
+                    : Center(
+                        child: Text("No entries to show"),
+                      ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMeasurement,

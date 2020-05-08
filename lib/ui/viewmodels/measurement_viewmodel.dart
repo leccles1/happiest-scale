@@ -15,6 +15,21 @@ class MeasurementViewModel extends ChangeNotifier {
 
   UnmodifiableListView<Measurement> get entries => UnmodifiableListView(_entries);
 
+
+  double get movingAverage {
+    int count = 0;
+    int average = 0;
+    for (var entry in _entries) {
+      average += entry.weight;
+      count++;
+      if(count == 7) {
+        break;
+      }
+    }
+    
+    return average / count;
+  }
+
   Future<void> fetchEntries() async {
     List<Measurement> measurements = await databaseService.fetchMeasurements();
 
