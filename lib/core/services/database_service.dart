@@ -9,20 +9,6 @@ class DatabaseService {
   DatabaseService();
 
   static final DatabaseService instance = DatabaseService._privateConstructor();
-
-  Future<DatabaseService> initialiseDatabase() async {
-    var databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'measurements.db');
-
-    _database = await openDatabase(
-      path, version: 1,
-      onCreate: (Database db, int version) {
-      return db.execute(
-          'CREATE TABLE measurement (id INTEGER PRIMARY KEY AUTOINCREMENT, weight INTEGER, notes STRING, unit_of_measurement STRING, date STRING)');
-      });
-
-    return this;
-  }
   
   Future<Database> get database async {
     if(_database != null) return _database;

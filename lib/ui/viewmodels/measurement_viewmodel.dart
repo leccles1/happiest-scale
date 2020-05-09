@@ -16,7 +16,7 @@ class MeasurementViewModel extends ChangeNotifier {
   UnmodifiableListView<Measurement> get entries => UnmodifiableListView(_entries);
 
 
-  double get movingAverage {
+  num get movingAverage {
     int count = 0;
     int average = 0;
     for (var entry in _entries) {
